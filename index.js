@@ -1,13 +1,16 @@
 var express = require("express");
 var app = express();
 
+const {Pool} = require("pg");
+const connectionString = process.env.DATABASE_URL || "postgress://helpreviewsUser:iamhelpreviewsuser@localhost:5432/helpreviews";
+const pool = new Pool({connectionString: connectionString});
+
 app.set("port", 5000)
 .use(express.static(__dirname + "/public"))
 .use(express.urlencoded())
 .use(express.json())
-//signin/login
-.get("/login", login)
-.post("/signup", signUp)
+//get all games
+.get("/getGames", getGames)
 //post help requests and responses
 .post("/postHelpRequest", postHelpRequest)
 .post("/postHelpResponse", postHelpResponse)
@@ -21,24 +24,6 @@ app.set("port", 5000)
 .listen(app.get("port"), function(){
     console.log("listening on port: " + app.get("port"));
 });
-
-function login(req, res){
-    //login to an already existing account
-    console.log("getting user login info....");
-    var userinfo = {id: 3,
-                    username: "i_am_user",
-                    password: "this_is_my_password"};
-    res.json(userinfo);
-}
-
-function signUp(req, res){
-    //signup for a new account
-    console.log("posting new user info to database....");
-    var input = {username: "new_user",
-                 password: "new_password"};
-    res.json(input);
-}
-
 function postHelpRequest(req, res){
     //post a new request for help
     console.log("posting a help request....");
@@ -87,9 +72,25 @@ function postReview(req, res){
 
 function getReviews(req, res){
     //get reviews for a game    
-    console.log("getting game reviews....");
-    var reviewGet = [{id: 1, created_by: 1, game_id: 3, rating: 5, comment: "This is a highly addictive game. By far the best one that bethesda has released yet. 5/5 to SKyrim!!"},
+
+    /*var reviewGet = [{id: 1, created_by: 1, game_id: 3, rating: 5, comment: "This is a highly addictive game. By far the best one that bethesda has released yet. 5/5 to SKyrim!!"},
                      {id: 2, created_by: 3, game_id: 2, rating: 3, comment: "The ending was terrible! I feel like i just spent three games making my own character just to get this cookie-cutter garbage."},
-                     {id: 3, created_by: 3, game_id: 4, rating: 5, comment: "This is a great game. I love the lego version of the original trilogy. Nostalgia much?"}];
-    res.json(reviewGet);
+                     {id: 3, created_by: 3, game_id: 4, rating: 5, comment: "This is a great game. I love the lego version of the original trilogy. Nostalgia much?"}];*/
+    //res.json(reviewGet);
+
+}
+
+function getGames(req, res){
+    console.log("getting all games....");
+    var sql = "SELECT name, esrbrating, userrating FROM games";
+    var params = [];
+    pool.query(sql, params, function(err, result){
+        if(err){
+            console.log("An error occured with the DB: " + err);
+            callback(err, null);
+        }
+        
+        console.log("Found DB result: " + JSON.stringify(result.rows));
+        callback(null, result.rows);
+    });
 }

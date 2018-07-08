@@ -1,13 +1,31 @@
+--first create the new database
+CREATE DATABASE helpreviews;
+--connect to database and then see relations and tables
+\c helpreviews
+\dt
+
+--create a new user to allow some access from the app instead of administrator permissions
+CREATE USER helpreviewsUser WITH PASSWORD 'iamhelpreviewsuser';
+GRANT SELECT, INSERT, UPDATE ON users, games, reviews, help, replies TO helpreviewsUser;
+
+--grant helreviewsUsers permission to auto-increment the id column when creating new data in any 
+--given one of the tables in the database
+GRANT USAGE, SELECT ON SEQUENCE users_id_seq TO helpreviewsUser;
+GRANT USAGE, SELECT ON SEQUENCE games_id_seq TO helpreviewsUser;
+GRANT USAGE, SELECT ON SEQUENCE reviews_id_seq TO helpreviewsUser;
+GRANT USAGE, SELECT ON SEQUENCE help_id_seq TO helpreviewsUser;
+GRANT USAGE, SELECT ON SEQUENCE replies_id_seq TO helpreviewsUser;
+
+--create tables for dataabase
 CREATE TABLE users
 (
     id SERIAL PRIMARY KEY,
-    username VARCHAR(25) NOT NULL,
-    password VARCHAR(50) NOT NULL
+    username VARCHAR(25) NOT NULL
 );
 
-INSERT INTO users(username, password) VALUES ('user_name', 'hashedpassword');
-INSERT INTO users(username, password) VALUES ('user_2', 'passhashed');
-INSERT INTO users(username, password) VALUES ('i_am_user', 'this_is_my_password');
+INSERT INTO users(username) VALUES ('user_name');
+INSERT INTO users(username) VALUES ('user_2');
+INSERT INTO users(username) VALUES ('i_am_user');
 
 CREATE TABLE games
 (
@@ -54,3 +72,5 @@ CREATE TABLE replies
 );
 
 INSERT INTO replies(created_by, helping, comment) VALUES ('1', '1', 'THis is one of those things in skyrim that the developers must have had plans to finish but never had a chance too. There are a few of these throughout the game.');
+
+billi
