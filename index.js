@@ -2,8 +2,8 @@ var express = require("express");
 var app = express();
 
 const {Pool} = require("pg");
-const connectionString = process.env.DATABASE_URL || "postgress://helpreviewsUser:iamhelpreviewsuser@localhost:5432/helpreviews";
-const pool = new Pool({connectionString: connectionString});
+const connectionString = process.env.DATABASE_URL || "postgres://helpreviewsuser:iamhelpreviewsuser@localhost:5432/helpreviews";
+const pool = new Pool({connectionString: connectionString/*, ssl:true*/});
 
 app.set("port", 5000)
 .use(express.static(__dirname + "/public"))
@@ -87,10 +87,23 @@ function getGames(req, res){
     pool.query(sql, params, function(err, result){
         if(err){
             console.log("An error occured with the DB: " + err);
-            callback(err, null);
+            //callback(err, null);
         }
         
-        console.log("Found DB result: " + JSON.stringify(result.rows));
-        callback(null, result.rows);
+        var data = JSON.stringify(result.rows);
+        console.log("Found DB result: " + data);
+        res.json(data);
+        //callback(null, result.rows);
+        appendGames(data);
     });
+}
+
+function appendGames(data){
+    if(data.length > 0) {
+        var resultList = $("#data");
+        //resultList.empty();
+    }
+
+    var raw = data;
+    resultList.append("<p>" + raw + "</p>");
 }
