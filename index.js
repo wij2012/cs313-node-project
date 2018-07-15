@@ -94,16 +94,6 @@ function getGames(req, res){
         console.log("Found DB result: " + data);
         res.json(data);
         //callback(null, result.rows);
-        appendGames(data);
     });
 }
 
-function appendGames(data){
-    if(data.length > 0) {
-        var resultList = $("#data");
-        //resultList.empty();
-    }
-
-    var raw = data;
-    resultList.append("<p>" + raw + "</p>");
-}
