@@ -26,13 +26,13 @@ function handleResults(result){
         resultList.empty();
     }
     
-    var insert = "<table><th>Name</th><th>ESRB Rating</th><th>User Rating</th><th>Link to Reviews</th><th>Link to Help Center</th>";
+    var insert = "<table><tr><th>Name</th><th>ESRB Rating</th><th>User Rating</th><th>Link to Reviews</th><th>Link to Help Center</th></tr>";
     for(var i = 0; i < data.length; i++){
-        insert += "<tr>" + data[i].name + "</tr>";
-        insert += "<tr>" + data[i].esrbrating + "</tr>";
-        insert += "<tr>" + data[i].userrating + "</tr>";
-        insert += "<tr> <button type='button' onclick='dosomething()'> Reviews </button></tr>";
-        insert += "<tr> <button type='button' onclick='dosomething()'> Help Center </button></tr>";
+        insert += "<tr><td>" + data[i].name + "</td>";
+        insert += "<td>" + data[i].esrbrating + "</td>";
+        insert += "<td>" + data[i].userrating + "</td>";
+        insert += "<td> <button type='button' onclick='dosomething()'> Reviews </button></td>";
+        insert += "<td> <button type='button' onclick='dosomething()'> Help Center </button></td></tr>";
     }
     insert += "</table>";
     console.log("inserting this table: " + insert);
