@@ -1,0 +1,7 @@
+enter into command line 
+npm init
+npm install express --save //install express
+npm install pg --save //install postgres for the database
+
+psql -Upostgres //to open connection to database
+Password for user postgres: //enter your password (try heroku password)

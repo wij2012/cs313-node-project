@@ -15,11 +15,16 @@
     <button type="button" onclick="getAllGames()"> Get all games </button>
     </form>
 
-    <div id="data">
-        Data from the database will either go here or back into the form. <br>
-        Since I want it to have buttons to act as links to the other pages probably the form.
-        
-        
+    <div id="data">        
     </div>
+
+    <form action="/postNewGames" method="post">
+        Name <br>
+        <input type="text" name="name">
+        <br><br>
+        ESRB Rating <br>
+        <input type="text" name="rating">
+        <input type="submit" value="submit">
+    </form>
 </body>
 </html>

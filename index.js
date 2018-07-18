@@ -11,6 +11,8 @@ app.set("port", 5000)
 .use(express.json())
 //get all games
 .get("/getGames", getGames)
+//post new games
+.post("/postNewGames", postNewGames)
 //post help requests and responses
 .post("/postHelpRequest", postHelpRequest)
 .post("/postHelpResponse", postHelpResponse)
@@ -24,6 +26,46 @@ app.set("port", 5000)
 .listen(app.get("port"), function(){
     console.log("listening on port: " + app.get("port"));
 });
+
+function getGames(req, res){
+    console.log("getting all games....");
+    var sql = "SELECT name, esrbrating, userrating FROM games";
+    var params = [];
+    pool.query(sql, params, function(err, result){
+        if(err){
+            console.log("An error occured with the DB: " + err);
+            //callback(err, null);
+        }
+        
+        console.log("result before json.stringify: " + result);
+ 
+        var data = JSON.stringify(result.rows);
+        console.log("Found DB result: " + result.rows);
+        res.json(result);
+    });
+}
+
+function postNewGames(req, res){
+    console.log("posting new game to database");
+    var name = req.body.name;
+    console.log("game name: " + name);
+    var rating = req.body.rating;
+    console.log("esrb rating: " + rating);
+    var sql = "INSERT INTO games (name, esrbrating) VALUES ($1::varchar, $2::varchar);";
+    var params = [name, rating];
+    pool.query(sql, params, function(err, result){
+        if(err){
+            console.log("An error occured with the DB: " + err);
+            //callback(err, null);
+        }
+        
+        else{
+            console.log("game inserted successfully!!!")
+            res.end();
+        }
+    });
+}
+
 function postHelpRequest(req, res){
     //post a new request for help
     console.log("posting a help request....");
@@ -79,21 +121,3 @@ function getReviews(req, res){
     //res.json(reviewGet);
 
 }
-
-function getGames(req, res){
-    console.log("getting all games....");
-    var sql = "SELECT name, esrbrating, userrating FROM games";
-    var params = [];
-    pool.query(sql, params, function(err, result){
-        if(err){
-            console.log("An error occured with the DB: " + err);
-            //callback(err, null);
-        }
-        
-        var data = JSON.stringify(result.rows);
-        console.log("Found DB result: " + data);
-        res.json(data);
-        //callback(null, result.rows);
-    });
-}
-
