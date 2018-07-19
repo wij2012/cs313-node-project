@@ -13,23 +13,23 @@ app.set("port", 5000)
 .get("/getGames", getGames)
 //post new games
 .post("/postNewGames", postNewGames)
+//get reviews of a game
+.get("/getReviews", getReviews)
+//post review of a game
+.post("/postReview", postReview)
 //post help requests and responses
 .post("/postHelpRequest", postHelpRequest)
 .post("/postHelpResponse", postHelpResponse)
 //get help requests and responses
 .get("/seeHelpRequests", getHelpRequests)
 .get("/seeHelpResponses", getHelpResponses)
-//post review of a game
-.post("/postReview", postReview)
-//get reviews of a game
-.get("/getReviews", getReviews)
 .listen(app.get("port"), function(){
     console.log("listening on port: " + app.get("port"));
 });
 
 function getGames(req, res){
     console.log("getting all games....");
-    var sql = "SELECT name, esrbrating, userrating FROM games";
+    var sql = "SELECT id, name, esrbrating, userrating FROM games";
     var params = [];
     pool.query(sql, params, function(err, result){
         if(err){
@@ -64,6 +64,35 @@ function postNewGames(req, res){
             res.end();
         }
     });
+}
+
+function getReviews(req, res){
+    console.log("getting reviews for a game..");
+    var id = req.query.id;
+    console.log("retrieving reviews for game id = " + id);
+    var sql = "SELECT * FROM reviews INNER JOIN game WHERE game_id = $1::int INNER JOIN users;";
+    var params = [id];
+    pool.query(sql, params, function(err, result){
+        if(err){
+            console.log("An error occured with the DB: " + err);
+            //callback(err, null);
+        }
+        
+        else{
+            console.log("game inserted successfully!!!")
+            res.end();
+        }
+    });
+}
+
+function postReview(req, res){
+    //post a review    
+    console.log("posting a game review....");
+    var reviewPost = {created_by: 3,
+                      game_id: 4,
+                      rating: 5,
+                      comment: "This is a great game. I love the lego version of the original trilogy. Nostalgia much?"};
+    res.json(reviewPost)
 }
 
 function postHelpRequest(req, res){
@@ -102,22 +131,4 @@ function getHelpResponses(req, res){
     res.json(helpResponses);
 }
 
-function postReview(req, res){
-    //post a review    
-    console.log("posting a game review....");
-    var reviewPost = {created_by: 3,
-                      game_id: 4,
-                      rating: 5,
-                      comment: "This is a great game. I love the lego version of the original trilogy. Nostalgia much?"};
-    res.json(reviewPost)
-}
 
-function getReviews(req, res){
-    //get reviews for a game    
-
-    /*var reviewGet = [{id: 1, created_by: 1, game_id: 3, rating: 5, comment: "This is a highly addictive game. By far the best one that bethesda has released yet. 5/5 to SKyrim!!"},
-                     {id: 2, created_by: 3, game_id: 2, rating: 3, comment: "The ending was terrible! I feel like i just spent three games making my own character just to get this cookie-cutter garbage."},
-                     {id: 3, created_by: 3, game_id: 4, rating: 5, comment: "This is a great game. I love the lego version of the original trilogy. Nostalgia much?"}];*/
-    //res.json(reviewGet);
-
-}

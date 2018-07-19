@@ -73,4 +73,13 @@ CREATE TABLE replies
 
 INSERT INTO replies(created_by, helping, comment) VALUES ('1', '1', 'THis is one of those things in skyrim that the developers must have had plans to finish but never had a chance too. There are a few of these throughout the game.');
 
-billi
+--returns all rows in the reviews table but shows all required data but the name of the game being reviewed
+SELECT u.username, r.rating, r.comment 
+FROM reviews r 
+INNER JOIN users u ON r.created_by = u.id;
+
+--returns one rating, comment, and username on repeat with all the games in the database
+SELECT u.username, g.name, r.rating, r.comment 
+FROM reviews r INNER JOIN games g 
+ON game_id = 2 
+INNER JOIN users u ON r.created_by = u.id;
