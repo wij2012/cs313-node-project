@@ -70,7 +70,7 @@ function getReviews(req, res){
     console.log("getting reviews for a game..");
     var id = req.query.id;
     console.log("retrieving reviews for game id = " + id);
-    var sql = "SELECT * FROM reviews INNER JOIN game WHERE game_id = $1::int INNER JOIN users;";
+    var sql = "SELECT u.username, g.name, r.rating, r.comment FROM reviews r INNER JOIN users u ON r.created_by = u.id INNER JOIN games g ON r.game_id = g.id AND g.id = $1::int;";
     var params = [id];
     pool.query(sql, params, function(err, result){
         if(err){

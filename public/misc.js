@@ -61,11 +61,11 @@ function handleGamesListed(result){
     var myObj = JSON.parse(result);
     console.log("result object: " , myObj.rows[0].name);
     var resultList;
-    var resultList2;
+    //var resultList2;
     if(result.length > 0) {
         resultList = $("#data");
         resultList.empty();
-        resultList2 = $("data2");
+        //resultList2 = $("data2");
 
         console.log("in the if statement");
         var insert = "<select name='gamelist' form='data' id='select'>";
@@ -77,10 +77,8 @@ function handleGamesListed(result){
         insert += "</select><br><br>";
         insert += "<button type='button' onclick='getReviews()'> Get all reviews for the above selected game </button>";
 
-        //console.log("inserting this table: " + insert);
         resultList.append(insert);
-        resultList.append(insert);
-        //console.log("data appended to html page");
+        //resultList2.append(insert);
     }
 }
 
@@ -94,9 +92,12 @@ function getReviews(){
 
 function handleReviews(result){
     console.log("back from AJAX with reviews: " + result);
-    console.log("data length: " + result[4]);
     var myObj = JSON.parse(result);
-    console.log("result object: " , myObj.rows[0]);
+
+    var resultList;
+    if(result.length > 0) {
+        
+    }
 }
 /*function postAGAME(){
     console.log("creating url to post a new game");
